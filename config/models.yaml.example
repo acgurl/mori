@@ -1,0 +1,48 @@
+# 模型配置示例
+# 复制此文件为 models.yaml 并填入你的API密钥
+
+models:
+  # OpenAI模型配置
+  - model_name: gpt-4
+    model_type: openai
+    api_key: ${OPENAI_API_KEY}  # 从环境变量读取
+    generate_kwargs:
+      temperature: 0.7
+      max_tokens: 2000
+
+  - model_name: gpt-3.5-turbo
+    model_type: openai
+    api_key: ${OPENAI_API_KEY}
+    generate_kwargs:
+      temperature: 0.8
+      max_tokens: 1500
+
+  # DashScope (阿里云通义千问) 配置
+  - model_name: qwen-max
+    model_type: dashscope
+    api_key: ${DASHSCOPE_API_KEY}
+    generate_kwargs:
+      temperature: 0.7
+      max_tokens: 2000
+
+  - model_name: qwen-turbo
+    model_type: dashscope
+    api_key: ${DASHSCOPE_API_KEY}
+    generate_kwargs:
+      temperature: 0.8
+
+  # Ollama本地模型配置
+  - model_name: llama3
+    model_type: ollama
+    base_url: http://localhost:11434
+    generate_kwargs:
+      temperature: 0.8
+
+  # DeepSeek配置（使用OpenAI兼容接口）
+  - model_name: deepseek-chat
+    model_type: openai
+    api_key: ${DEEPSEEK_API_KEY}
+    base_url: https://api.deepseek.com/v1
+    generate_kwargs:
+      temperature: 0.7
+      max_tokens: 2000

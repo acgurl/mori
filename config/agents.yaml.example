@@ -1,0 +1,13 @@
+# Agent配置示例
+# 复制此文件为 agents.yaml
+
+agents:
+  # Mori - 虚拟AI女友
+  - name: mori
+    model: gpt-4  # 引用 models.yaml 中的模型名称
+    template: mori  # 模板名称，自动查找 internal_template/mori.jinja2
+    sys_prompt: null  # 如果为null，则使用模板中的提示词
+    memory_config:
+      type: memory
+      max_length: 100
+    parallel_tool_calls: true  # 是否支持并行工具调用

@@ -1,0 +1,11 @@
+# 全局配置示例
+# 复制此文件为 config.yaml
+
+global:
+  log_level: INFO  # 日志级别: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_dir: logs    # 日志目录
+
+server:
+  host: 127.0.0.1    # 服务器地址，0.0.0.0表示监听所有网络接口
+  port: 7860       # 服务器端口
+  share: false     # 是否创建Gradio公共链接

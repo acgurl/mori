@@ -1,0 +1,4 @@
+{
+  "mcpServers": {},
+  "note": "MCP (Model Context Protocol) 配置预留，暂未实现。未来可以在这里配置MCP服务器连接。"
+}
