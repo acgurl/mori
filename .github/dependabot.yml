@@ -1,11 +1,65 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# Dependabot 配置文件
+# 文档: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Python 依赖更新 (uv)
+  - package-ecosystem: "uv"
+    directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Shanghai"
+    # 自动合并补丁和次要版本更新
+    open-pull-requests-limit: 10
+    # 提交消息配置
+    commit-message:
+      prefix: "⬆️ deps"
+      prefix-development: "⬆️ deps-dev"
+      include: "scope"
+    # 标签配置
+    labels:
+      - "dependencies"
+      - "python"
+    # 审查者配置（可选，根据需要取消注释）
+    # reviewers:
+    #   - "your-username"
+    # 指派人配置（可选，根据需要取消注释）
+    # assignees:
+    #   - "your-username"
+    # 允许的依赖类型
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    # 版本更新策略
+    versioning-strategy: "increase"
+    # 分组更新配置
+    groups:
+      # 开发依赖组
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      # 生产依赖组
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+
+  # GitHub Actions 工作流更新
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Shanghai"
+    commit-message:
+      prefix: "⬆️ ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    open-pull-requests-limit: 5
