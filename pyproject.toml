@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "agentscope>=1.0.8",
-    "gradio>=4.0.0",
+    "gradio>=6.0.0",
     "pydantic>=2.0.0",
     "pyyaml>=6.0.0",
     "jinja2>=3.1.0",
@@ -75,3 +75,25 @@ packages = ["mori"]
 dev = [
     "pre-commit>=4.5.0",
 ]
+
+[[tool.uv.index]]
+name = "tencent"
+url = "https://mirrors.cloud.tencent.com/pypi/simple/"
+#url = "https://mirrors.tencentyun.com/pypi/simple/" # 内网
+
+[[tool.uv.index]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+#url = "http://mirrors.cloud.aliyuncs.com/pypi/simple/" # 内网
+
+[[tool.uv.index]]
+name = "huaweicloud"
+url = "https://mirrors.huaweicloud.com/repository/pypi/simple/"
+
+[[tool.uv.index]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+
+[[tool.uv.index]]
+name = "ustc"
+url = "https://pypi.mirrors.ustc.edu.cn/simple/"

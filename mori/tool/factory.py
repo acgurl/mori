@@ -6,6 +6,7 @@
 from agentscope.tool import Toolkit
 
 from mori.tool.internal_tools.example_tools import register_tools
+from mori.tool.internal_tools.memory_tools import register_memory_tools
 
 
 def create_toolkit() -> Toolkit:
@@ -20,4 +21,6 @@ def create_toolkit() -> Toolkit:
     toolkit = Toolkit()
     # 注册内置工具
     register_tools(toolkit)
+    # 注册长期记忆工具
+    register_memory_tools(toolkit)
     return toolkit

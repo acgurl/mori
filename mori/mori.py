@@ -12,6 +12,7 @@ from agentscope.message import Msg
 from logger import setup_logger
 from mori.agent.manager import AgentManager
 from mori.config import load_config
+from mori.exceptions import MemoryError
 from mori.utils.response import extract_text_from_response
 
 
@@ -96,15 +97,16 @@ class Mori:
             self.logger.info("成功生成回复")
             return reply_text
 
+        except MemoryError as e:
+            # 捕获长期记忆相关错误
+            self.logger.error(f"处理记忆相关请求时发生错误: {str(e)}", exc_info=True)
+            return "抱歉,我在尝试记忆信息时遇到了问题。我已经记录了这个错误,会尽快修复。"
         except Exception as e:
-            # 捕获所有异常,包括 API 错误、工具错误等
+            # 捕获所有其他异常,包括 API 错误、工具错误等
             error_msg = str(e)
             self.logger.error(f"处理消息时发生错误: {error_msg}", exc_info=True)
 
-            # 检查是否是长期记忆相关错误
-            if "record_to_memory" in error_msg or "retrieve_from_memory" in error_msg:
-                return "抱歉,我在尝试记忆信息时遇到了问题。我已经记录了这个错误,会尽快修复。"
-            elif "can only concatenate list" in error_msg:
+            if "can only concatenate list" in error_msg:
                 return "抱歉,处理您的请求时出现了内部错误。请稍后再试。"
             elif "text cannot be empty" in error_msg:
                 return "抱歉,生成回复时出现了格式错误。请重新提问。"

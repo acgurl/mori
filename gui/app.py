@@ -3,8 +3,9 @@
 使用Gradio创建Web界面，提供友好的用户交互体验。
 """
 
+import asyncio
 import traceback
-from typing import Dict, List, Tuple
+from typing import Generator
 
 import gradio as gr
 
@@ -42,145 +43,60 @@ class MoriGUI:
             logger.debug(traceback.format_exc())
             raise MoriError("GUI 初始化失败", str(e))
 
-    async def chat(
-        self, message: str, history: List[Dict[str, str]]
-    ) -> Tuple[str, List[Dict[str, str]]]:
-        """处理聊天消息
+    def respond(self, message: str, history: list) -> Generator[str, None, None]:
+        """处理聊天消息（生成器版本，用于流式输出）
 
         Args:
             message: 用户消息
-            history: 对话历史（Gradio 6.0格式）
+            history: 对话历史
 
-        Returns:
-            (空字符串, 更新后的历史)
+        Yields:
+            响应文本
         """
         if not message.strip():
             logger.debug("收到空消息，忽略")
-            return "", history
+            yield ""
+            return
 
         try:
-            # 获取回复 (mori.chat 已处理所有异常)
-            response = await self.mori.chat(message)
-
-            # 更新历史 - Gradio 6.0格式
-            history.append({"role": "user", "content": message})
-            history.append({"role": "assistant", "content": response})
-
-            return "", history
+            # 使用 asyncio.run 运行异步方法
+            response = asyncio.run(self.mori.chat(message))
+            yield response
 
         except Exception as e:
             # 最后一道防线: 捕获任何未被 mori.chat 处理的异常
             logger.error(f"GUI层捕获到未处理的错误: {e}", exc_info=True)
+            yield "抱歉，系统出现了意外错误。请稍后重试。"
 
-            error_message = "抱歉，系统出现了意外错误。请稍后重试。"
-            history.append({"role": "user", "content": message})
-            history.append({"role": "assistant", "content": error_message})
-
-            return "", history
-
-    async def reset(self) -> List[Dict[str, str]]:
-        """重置对话
+    def create_interface(self) -> gr.ChatInterface:
+        """创建Gradio聊天界面
 
         Returns:
-            空的对话历史
+            Gradio ChatInterface对象
         """
-        try:
-            logger.info("重置对话")
-            await self.mori.reset()
-            logger.info("对话重置成功")
-            return []
-        except Exception as e:
-            logger.error(f"重置对话失败: {e}")
-            logger.debug(traceback.format_exc())
-            # 即使重置失败，也返回空列表以清空 UI
-            return []
+        # 获取主agent配置信息
+        primary_agent_name = self.mori.get_primary_agent_name()
+        primary_agent_config = self.config.agents.get(primary_agent_name)
+        primary_agent = self.mori.primary_agent
 
-    def create_interface(self) -> gr.Blocks:
-        """创建Gradio界面
+        description = f"""
+        欢迎来到Mori的世界！我会用心陪伴你，倾听你的心声。✨
 
-        Returns:
-            Gradio Blocks对象
+        **当前配置**: 主Agent: {primary_agent_name} | 模型: {primary_agent_config.model if primary_agent_config else 'N/A'} | 工具: {len(primary_agent.toolkit.get_json_schemas())} 个
         """
-        with gr.Blocks(
-            title="Mori - 虚拟AI女友",
-        ) as app:
-            gr.Markdown(
-                """
-                # 💕 Mori - 你的虚拟AI女友
 
-                欢迎来到Mori的世界！我会用心陪伴你，倾听你的心声。✨
-                """
-            )
+        chat_interface = gr.ChatInterface(
+            fn=self.respond,
+            title="💕 Mori - 你的虚拟AI女友",
+            description=description,
+            examples=[
+                "你好，今天过得怎么样？",
+                "我今天心情不太好...",
+                "给我讲个有趣的故事吧",
+            ],
+        )
 
-            with gr.Row():
-                with gr.Column(scale=4):
-                    chatbot = gr.Chatbot(
-                        label="与Mori聊天",
-                        height=500,
-                        show_label=True,
-                        avatar_images=(None, "🌸"),
-                    )
-
-                    with gr.Row():
-                        msg = gr.Textbox(
-                            label="",
-                            placeholder="和Mori说点什么吧... 💭",
-                            show_label=False,
-                            scale=4,
-                        )
-                        submit = gr.Button("发送 💌", scale=1, variant="primary")
-
-                    with gr.Row():
-                        clear = gr.Button("清空对话 🔄", scale=1)
-
-                with gr.Column(scale=1):
-                    gr.Markdown(
-                        """
-                        ### 💡 使用提示
-
-                        - 和Mori分享你的心情
-                        - 聊聊你的日常生活
-                        - 寻求情感支持
-                        - 或者只是闲聊 😊
-
-                        ### ⚙️ 当前配置
-                        """
-                    )
-
-                    # 获取主agent配置信息
-                    primary_agent_name = self.mori.get_primary_agent_name()
-                    primary_agent_config = self.config.agents.get(primary_agent_name)
-                    primary_agent = self.mori.primary_agent
-
-                    gr.Markdown(
-                        f"""
-                        - **主Agent**: {primary_agent_name}
-                        - **模型**: {primary_agent_config.model if primary_agent_config else 'N/A'}
-                        - **工具**: {len(primary_agent.toolkit.get_json_schemas())} 个
-                        - **可用Agents**: {len(self.mori.list_agents())} 个
-                        """
-                    )
-
-            # 绑定事件
-            msg.submit(
-                self.chat,
-                inputs=[msg, chatbot],
-                outputs=[msg, chatbot],
-            )
-
-            submit.click(
-                self.chat,
-                inputs=[msg, chatbot],
-                outputs=[msg, chatbot],
-            )
-
-            clear.click(
-                fn=self.reset,
-                inputs=None,
-                outputs=[chatbot],
-            )
-
-        return app
+        return chat_interface
 
     def launch(
         self,

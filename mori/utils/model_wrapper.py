@@ -3,6 +3,8 @@
 提供用于包装 AgentScope 模型的工具类。
 """
 
+from typing import Any
+
 from agentscope.model import ChatModelBase
 
 
@@ -12,25 +14,30 @@ class NonStreamingModelWrapper(ChatModelBase):
     Mem0 库在调用 AgentScope 模型时不支持流式响应，
     此包装类确保模型始终返回完整响应而不是 async_generator。
 
+    正确继承 ChatModelBase 并调用父类初始化，同时实现非流式功能。
+
     使用方法:
         wrapped_model = NonStreamingModelWrapper(original_model)
         response = await wrapped_model(messages)
     """
 
-    def __init__(self, model):
+    def __init__(self, model: Any):
         """初始化包装器
 
         Args:
             model: 要包装的 AgentScope 模型实例
         """
-        # 不调用父类 __init__，因为我们只是包装现有模型
+        # 调用父类初始化，传递必要的参数
+        # ChatModelBase.__init__ 需要 model_name 和 stream 两个参数
+        super().__init__(
+            model_name=getattr(model, "model_name", "wrapped_model"),
+            stream=False,  # 强制禁用流式输出
+        )
         self.model = model
         # 保存原始的 generate_kwargs
         self._original_generate_kwargs = getattr(model, "generate_kwargs", {})
-        # 复制模型的关键属性以满足 ChatModelBase 的要求
-        self.model_name = getattr(model, "model_name", "wrapped_model")
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str):
         """代理所有属性访问到原始模型
 
         Args:
