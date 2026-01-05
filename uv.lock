@@ -10,7 +10,7 @@ resolution-markers = [
 
 [[package]]
 name = "agentscope"
-version = "1.0.10"
+version = "1.0.11"
 source = { registry = "https://mirrors.cloud.tencent.com/pypi/simple/" }
 dependencies = [
     { name = "aioitertools" },
@@ -34,9 +34,9 @@ dependencies = [
     { name = "sounddevice" },
     { name = "tiktoken" },
 ]
-sdist = { url = "https://mirrors.cloud.tencent.com/pypi/packages/2d/ff/4209bfe526278faf9681f39c62c4022d88db55f278adf256fedbb7563ce8/agentscope-1.0.10.tar.gz", hash = "sha256:633f504829331c97faed5933ef986052feadbee7e6e645336fdff81e6f25258c" }
+sdist = { url = "https://mirrors.cloud.tencent.com/pypi/packages/db/75/6016eaafccdea52e9dfdea1744e4ed812ad4e0214e723cb971c09571aba9/agentscope-1.0.11.tar.gz", hash = "sha256:f6883f1ba64f62af8710fdffc970ec6ad7c78e79edfc325f93a33713f726bf1b" }
 wheels = [
-    { url = "https://mirrors.cloud.tencent.com/pypi/packages/31/b7/8e9f465c2d826125e8bbe09e4beb66495c2bc030fbd70199fecd72bd25ae/agentscope-1.0.10-py3-none-any.whl", hash = "sha256:5c61c2ea861fe0019a483f9b01dda06d9f714dae40821d3cd82b98776a42393a" },
+    { url = "https://mirrors.cloud.tencent.com/pypi/packages/92/28/aa898a4b93f69a3b444900ddc5508fb27c5e5f2681e02cbbfcc6de944c4e/agentscope-1.0.11-py3-none-any.whl", hash = "sha256:be1466151cb6b4c5481513b7b7778699662cf9ecb166debcc2a89d3ded525110" },
 ]
 
 [[package]]
