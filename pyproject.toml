@@ -14,7 +14,7 @@ dependencies = [
     "httpx>=0.25.0",
     "openai>=1.0.0",
     "mem0ai>=0.1.0",
-    "websockets<14.0",
+    "websockets<17.0",
 ]
 
 [project.urls]
