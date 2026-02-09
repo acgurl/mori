@@ -10,7 +10,7 @@ resolution-markers = [
 
 [[package]]
 name = "agentscope"
-version = "1.0.10"
+version = "1.0.14"
 source = { registry = "https://mirrors.cloud.tencent.com/pypi/simple/" }
 dependencies = [
     { name = "aioitertools" },
@@ -32,11 +32,12 @@ dependencies = [
     { name = "python-socketio" },
     { name = "shortuuid" },
     { name = "sounddevice" },
+    { name = "sqlalchemy" },
     { name = "tiktoken" },
 ]
-sdist = { url = "https://mirrors.cloud.tencent.com/pypi/packages/2d/ff/4209bfe526278faf9681f39c62c4022d88db55f278adf256fedbb7563ce8/agentscope-1.0.10.tar.gz", hash = "sha256:633f504829331c97faed5933ef986052feadbee7e6e645336fdff81e6f25258c" }
+sdist = { url = "https://mirrors.cloud.tencent.com/pypi/packages/dc/77/481ca6982280716d813b1ab5b97164c4302dcc90ca8b77cbac34624dbfd6/agentscope-1.0.14.tar.gz", hash = "sha256:46d195ccdd5287b264bfd2eff74eaec25a0bf9e1429db4da3c1e38e8e39b823f" }
 wheels = [
-    { url = "https://mirrors.cloud.tencent.com/pypi/packages/31/b7/8e9f465c2d826125e8bbe09e4beb66495c2bc030fbd70199fecd72bd25ae/agentscope-1.0.10-py3-none-any.whl", hash = "sha256:5c61c2ea861fe0019a483f9b01dda06d9f714dae40821d3cd82b98776a42393a" },
+    { url = "https://mirrors.cloud.tencent.com/pypi/packages/45/61/36383747924df5b777cd4fa73716c492ff42dc6f11bcd2a6829a27729463/agentscope-1.0.14-py3-none-any.whl", hash = "sha256:ec9c5315353023e18db38169ffd9b76f87e4658aabcd4b3da9418ca369251633" },
 ]
 
 [[package]]
@@ -1716,7 +1717,7 @@ wheels = [
 
 [[package]]
 name = "mem0ai"
-version = "1.0.1"
+version = "1.0.3"
 source = { registry = "https://mirrors.cloud.tencent.com/pypi/simple/" }
 dependencies = [
     { name = "openai" },
@@ -1727,9 +1728,9 @@ dependencies = [
     { name = "qdrant-client" },
     { name = "sqlalchemy" },
 ]
-sdist = { url = "https://mirrors.cloud.tencent.com/pypi/packages/39/cd/f9047cd45952af08da8084c2297f8aad780f9ac8558631fc64b3ed235b28/mem0ai-1.0.1.tar.gz", hash = "sha256:53be77f479387e6c07508096eb6c0688150b31152613bdcf6c281246b000b14d" }
+sdist = { url = "https://mirrors.cloud.tencent.com/pypi/packages/ce/b6/9d3a747a5c1af2b4f73572a3d296bf5e99c99630a3f201b0ddbb14e811e6/mem0ai-1.0.3.tar.gz", hash = "sha256:8f7abe485a61653e3f2d3f8c222f531f8b52660b19d88820c56522103d9f31b5" }
 wheels = [
-    { url = "https://mirrors.cloud.tencent.com/pypi/packages/81/42/120d6db33e190ef09d69428ddd2eaaa87e10f4c8243af788f5fc524748c9/mem0ai-1.0.1-py3-none-any.whl", hash = "sha256:a8eeca9688e87f175af53d463b4a3b2d552984c81e29bc656c847dc04eaf6f75" },
+    { url = "https://mirrors.cloud.tencent.com/pypi/packages/84/3e/b300ab9fa6efd36c78f1402684eab1483f282c4ca6e983920fceb9c0f4fb/mem0ai-1.0.3-py3-none-any.whl", hash = "sha256:f500c3decc12c2663b2ad829ac4edcd0c674f2bd9bf4abf7f5c0522aef3d3cf8" },
 ]
 
 [[package]]
