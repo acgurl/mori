@@ -53,19 +53,25 @@ def create_mori_agent(
     # 创建内存实例
     memory = InMemoryMemory()
 
-    # 创建并返回ReActAgent
-    agent = ReActAgent(
-        name=agent_name,
-        sys_prompt=sys_prompt,
-        model=model,
-        formatter=formatter,
-        memory=memory,
-        toolkit=toolkit,
-        parallel_tool_calls=parallel_tool_calls,
-        long_term_memory=long_term_memory,
-        long_term_memory_mode=long_term_memory_mode,
+    # 构建基础参数字典
+    react_kwargs = {
+        "name": agent_name,
+        "sys_prompt": sys_prompt,
+        "model": model,
+        "formatter": formatter,
+        "memory": memory,
+        "toolkit": toolkit,
+        "parallel_tool_calls": parallel_tool_calls,
+        "long_term_memory": long_term_memory,
         **kwargs,
-    )
+    }
+
+    # 仅在启用了长期记忆且模式非空时传入该参数，规避断言错误
+    if long_term_memory is not None and long_term_memory_mode:
+        react_kwargs["long_term_memory_mode"] = long_term_memory_mode
+
+    # 创建并返回ReActAgent
+    agent = ReActAgent(**react_kwargs)
 
     return agent
 
