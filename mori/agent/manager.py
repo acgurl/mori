@@ -106,7 +106,7 @@ class AgentManager:
         # 从基础工具集中筛选该agent可用的工具
         for tool_name in tool_names:
             # 从基础工具集获取工具
-            tool = self.base_toolkit.get(tool_name)
+            tool = self.base_toolkit.tools.get(tool_name)
             if tool is not None:
                 toolkit.add(tool)
             else:
