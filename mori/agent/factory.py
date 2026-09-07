@@ -4,7 +4,7 @@
 """
 
 from logging import Logger
-from typing import Any, Optional
+from typing import Any
 
 from agentscope.agent import ReActAgent
 from agentscope.formatter import FormatterBase
@@ -22,10 +22,10 @@ def create_mori_agent(
     sys_prompt: str,
     model: ChatModelBase,
     formatter: FormatterBase,
-    toolkit: Optional[Toolkit] = None,
+    toolkit: Toolkit | None = None,
     parallel_tool_calls: bool = False,
-    long_term_memory: Optional[MemoryBase] = None,
-    long_term_memory_mode: Optional[str] = None,
+    long_term_memory: MemoryBase | None = None,
+    long_term_memory_mode: str | None = None,
     **kwargs: Any,
 ) -> ReActAgent:
     """创建Mori Agent实例
@@ -77,7 +77,7 @@ def build_agent(
     sys_prompt: str,
     toolkit: Toolkit,
     config: Config,
-    logger: Optional[Logger] = None,
+    logger: Logger | None = None,
 ) -> ReActAgent:
     """构建完整配置的Agent实例
 

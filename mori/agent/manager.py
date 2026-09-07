@@ -4,7 +4,6 @@
 """
 
 from logging import Logger
-from typing import Dict, List, Optional
 
 from agentscope.agent import ReActAgent
 from agentscope.tool import Toolkit
@@ -23,7 +22,7 @@ class AgentManager:
     负责管理多个agent实例，提供agent创建、缓存和工具注册功能。
     """
 
-    def __init__(self, config: Config, logger: Optional[Logger] = None):
+    def __init__(self, config: Config, logger: Logger | None = None):
         """初始化Agent管理器
 
         Args:
@@ -32,7 +31,7 @@ class AgentManager:
         """
         self.config = config
         self.logger = logger
-        self.agents: Dict[str, ReActAgent] = {}
+        self.agents: dict[str, ReActAgent] = {}
         self.template_loader = TemplateLoader()
         self.base_toolkit = create_toolkit()  # 创建基础工具集
 
@@ -86,7 +85,7 @@ class AgentManager:
 
         return agent
 
-    def _create_agent_toolkit(self, tool_names: List[str]) -> Toolkit:
+    def _create_agent_toolkit(self, tool_names: list[str]) -> Toolkit:
         """为特定agent创建工具集
 
         根据配置中指定的工具名称，从基础工具集中筛选工具。
@@ -141,7 +140,7 @@ class AgentManager:
         """
         return self.get_agent(self.config.primary_agent)
 
-    def list_agents(self) -> List[str]:
+    def list_agents(self) -> list[str]:
         """列出所有可用的agent名称
 
         Returns:

@@ -6,7 +6,7 @@
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from jinja2 import (
     ChoiceLoader,
@@ -32,7 +32,7 @@ class TemplateLoader:
     """
 
     def __init__(
-        self, template_dir: Optional[str] = None, custom_template_dir: Optional[str] = None
+        self, template_dir: str | None = None, custom_template_dir: str | None = None
     ):
         """初始化模板加载器
 
@@ -61,7 +61,7 @@ class TemplateLoader:
         self.custom_template_dir.mkdir(parents=True, exist_ok=True)
 
         # 创建多个加载器，按优先级排序
-        loaders: List[FileSystemLoader] = []
+        loaders: list[FileSystemLoader] = []
 
         # 1. 自定义模板目录（最高优先级）
         if self.custom_template_dir.exists():
@@ -142,7 +142,7 @@ class TemplateLoader:
             logger.error(f"加载模板失败 ({template_name}): {e}")
             raise TemplateError(f"加载模板失败: {template_name}", str(e))
 
-    def render_template(self, template_name: str, context: Optional[Dict[str, Any]] = None) -> str:
+    def render_template(self, template_name: str, context: dict[str, Any] | None = None) -> str:
         """加载并渲染模板
 
         Args:
@@ -174,7 +174,7 @@ class TemplateLoader:
             logger.error(f"渲染模板失败 ({template_name}): {e}")
             raise TemplateRenderError(template_name, e)
 
-    def render_string(self, template_string: str, context: Optional[Dict[str, Any]] = None) -> str:
+    def render_string(self, template_string: str, context: dict[str, Any] | None = None) -> str:
         """渲染模板字符串
 
         Args:
@@ -204,7 +204,7 @@ class TemplateLoader:
             raise TemplateError("渲染模板字符串失败", str(e))
 
 
-def load_template_file(template_path: str, context: Optional[Dict[str, Any]] = None) -> str:
+def load_template_file(template_path: str, context: dict[str, Any] | None = None) -> str:
     """便捷函数：加载并渲染模板文件
 
     Args:
