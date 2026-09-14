@@ -3,7 +3,6 @@
 提供项目特定的异常类，便于区分和处理不同类型的错误。
 """
 
-from typing import List, Optional
 
 
 class MoriError(Exception):
@@ -12,7 +11,7 @@ class MoriError(Exception):
     所有自定义异常都应该继承此类。
     """
 
-    def __init__(self, message: str, details: Optional[str] = None):
+    def __init__(self, message: str, details: str | None = None):
         """初始化异常
 
         Args:
@@ -36,7 +35,6 @@ class ConfigError(MoriError):
     当配置文件加载、解析或验证失败时抛出。
     """
 
-    pass
 
 
 class ConfigFileNotFoundError(ConfigError):
@@ -59,7 +57,7 @@ class ConfigParseError(ConfigError):
 class ConfigValidationError(ConfigError):
     """配置验证错误"""
 
-    def __init__(self, message: str, validation_errors: Optional[List[str]] = None):
+    def __init__(self, message: str, validation_errors: list[str] | None = None):
         details = None
         if validation_errors:
             details = "\n".join(f"  - {err}" for err in validation_errors)
@@ -73,7 +71,6 @@ class ModelError(MoriError):
     当模型创建、初始化或调用失败时抛出。
     """
 
-    pass
 
 
 class ModelConfigError(ModelError):
@@ -87,7 +84,7 @@ class ModelConfigError(ModelError):
 class ModelNotFoundError(ModelError):
     """模型不存在"""
 
-    def __init__(self, model_name: str, available_models: Optional[List[str]] = None):
+    def __init__(self, model_name: str, available_models: list[str] | None = None):
         details = None
         if available_models:
             details = f"可用模型: {', '.join(available_models)}"
@@ -102,7 +99,6 @@ class AgentError(MoriError):
     当 Agent 创建、初始化或执行失败时抛出。
     """
 
-    pass
 
 
 class AgentConfigError(AgentError):
@@ -116,7 +112,7 @@ class AgentConfigError(AgentError):
 class AgentNotFoundError(AgentError):
     """Agent 不存在"""
 
-    def __init__(self, agent_name: str, available_agents: Optional[List[str]] = None):
+    def __init__(self, agent_name: str, available_agents: list[str] | None = None):
         details = None
         if available_agents:
             details = f"可用 Agent: {', '.join(available_agents)}"
@@ -131,7 +127,6 @@ class ToolError(MoriError):
     当工具注册、查找或执行失败时抛出。
     """
 
-    pass
 
 
 class ToolExecutionError(ToolError):
@@ -149,7 +144,6 @@ class MemoryError(MoriError):
     当记忆系统初始化或操作失败时抛出。
     """
 
-    pass
 
 
 class MemoryConfigError(MemoryError):
@@ -165,13 +159,12 @@ class TemplateError(MoriError):
     当模板加载或渲染失败时抛出。
     """
 
-    pass
 
 
 class TemplateNotFoundError(TemplateError):
     """模板不存在"""
 
-    def __init__(self, template_name: str, search_paths: Optional[List[str]] = None):
+    def __init__(self, template_name: str, search_paths: list[str] | None = None):
         details = None
         if search_paths:
             details = f"搜索路径: {', '.join(search_paths)}"
