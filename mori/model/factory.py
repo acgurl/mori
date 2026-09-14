@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import logging
 from logging import Logger
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any
 
 from agentscope.embedding import (
     DashScopeTextEmbedding,
@@ -48,10 +48,10 @@ class ModelRegistry:
     """
 
     def __init__(self):
-        self._registry: Dict[str, Tuple[Type[ChatModelBase], Type[Any]]] = {}
+        self._registry: dict[str, tuple[type[ChatModelBase], type[Any]]] = {}
 
     def register(
-        self, model_type: str, model_class: Type[ChatModelBase], formatter_class: Type[Any]
+        self, model_type: str, model_class: type[ChatModelBase], formatter_class: type[Any]
     ) -> None:
         """注册新的模型类型
 
@@ -66,7 +66,7 @@ class ModelRegistry:
         self._registry[model_type] = (model_class, formatter_class)
         logger.debug(f"注册模型类型: {model_type}")
 
-    def get(self, model_type: str) -> Tuple[Type[ChatModelBase], Type[Any]]:
+    def get(self, model_type: str) -> tuple[type[ChatModelBase], type[Any]]:
         """获取模型类型对应的类
 
         Args:
@@ -86,7 +86,7 @@ class ModelRegistry:
             )
         return self._registry[model_type]
 
-    def list_types(self) -> List[str]:
+    def list_types(self) -> list[str]:
         """列出所有已注册的模型类型"""
         return list(self._registry.keys())
 
@@ -102,9 +102,9 @@ class EmbeddingModelRegistry:
     """
 
     def __init__(self):
-        self._registry: Dict[str, Type[Any]] = {}
+        self._registry: dict[str, type[Any]] = {}
 
-    def register(self, model_type: str, model_class: Type[Any]) -> None:
+    def register(self, model_type: str, model_class: type[Any]) -> None:
         """注册新的嵌入模型类型
 
         Args:
@@ -117,7 +117,7 @@ class EmbeddingModelRegistry:
         self._registry[model_type] = model_class
         logger.debug(f"注册嵌入模型类型: {model_type}")
 
-    def get(self, model_type: str) -> Type[Any]:
+    def get(self, model_type: str) -> type[Any]:
         """获取嵌入模型类型对应的类
 
         Args:
@@ -137,7 +137,7 @@ class EmbeddingModelRegistry:
             )
         return self._registry[model_type]
 
-    def list_types(self) -> List[str]:
+    def list_types(self) -> list[str]:
         """列出所有已注册的嵌入模型类型"""
         return list(self._registry.keys())
 
@@ -176,7 +176,7 @@ _register_builtin_models()
 
 # 公开 API：允许外部注册自定义模型
 def register_chat_model(
-    model_type: str, model_class: Type[ChatModelBase], formatter_class: Type[Any]
+    model_type: str, model_class: type[ChatModelBase], formatter_class: type[Any]
 ) -> None:
     """注册自定义聊天模型类型
 
@@ -194,7 +194,7 @@ def register_chat_model(
     _chat_model_registry.register(model_type, model_class, formatter_class)
 
 
-def register_embedding_model(model_type: str, model_class: Type[Any]) -> None:
+def register_embedding_model(model_type: str, model_class: type[Any]) -> None:
     """注册自定义嵌入模型类型
 
     允许用户扩展框架支持新的嵌入模型类型，无需修改源代码。
@@ -210,7 +210,7 @@ def register_embedding_model(model_type: str, model_class: Type[Any]) -> None:
     _embedding_model_registry.register(model_type, model_class)
 
 
-def create_chat_model(model_config: ModelConfig) -> Tuple[ChatModelBase, Any]:
+def create_chat_model(model_config: ModelConfig) -> tuple[ChatModelBase, Any]:
     """根据配置创建聊天模型实例和对应的formatter
 
     本函数封装了根据 model_type 选择不同 AgentScope 模型类的逻辑。
@@ -241,7 +241,7 @@ def create_chat_model(model_config: ModelConfig) -> Tuple[ChatModelBase, Any]:
 
     try:
         # 构建模型参数
-        model_kwargs: Dict[str, Any] = {"model_name": model_name}
+        model_kwargs: dict[str, Any] = {"model_name": model_name}
 
         if model_config.api_key:
             model_kwargs["api_key"] = model_config.api_key
@@ -271,7 +271,7 @@ def create_chat_model(model_config: ModelConfig) -> Tuple[ChatModelBase, Any]:
 
 
 def create_embedding_model(
-    embedding_config: EmbeddingModelConfig, custom_logger: Optional[Logger] = None
+    embedding_config: EmbeddingModelConfig, custom_logger: Logger | None = None
 ):
     """根据配置创建嵌入模型实例
 
@@ -304,7 +304,7 @@ def create_embedding_model(
 
     try:
         # 构建模型参数
-        model_kwargs: Dict[str, Any] = {"model_name": model_name}
+        model_kwargs: dict[str, Any] = {"model_name": model_name}
 
         if embedding_config.api_key:
             model_kwargs["api_key"] = embedding_config.api_key

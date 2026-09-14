@@ -9,7 +9,7 @@ import logging
 import os
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import yaml
 from pydantic import BaseModel, Field, ValidationError, field_validator, model_validator
@@ -34,7 +34,7 @@ from mori.exceptions import (
 logger = logging.getLogger(__name__)
 
 
-def resolve_env_var(value: Optional[str]) -> Optional[str]:
+def resolve_env_var(value: str | None) -> str | None:
     """解析环境变量引用
 
     支持 ${ENV_VAR_NAME} 格式的环境变量引用
@@ -63,15 +63,15 @@ class ModelConfig(BaseModel):
 
     model_name: str = Field(..., description="模型名称")
     model_type: str = Field(..., description="模型类型，如openai, dashscope, ollama等")
-    api_key: Optional[str] = Field(None, description="API密钥")
-    base_url: Optional[str] = Field(None, description="API基础URL")
-    generate_kwargs: Optional[Dict[str, Any]] = Field(
+    api_key: str | None = Field(None, description="API密钥")
+    base_url: str | None = Field(None, description="API基础URL")
+    generate_kwargs: dict[str, Any] | None = Field(
         default_factory=dict, description="生成参数，如temperature, max_tokens等"
     )
 
     @field_validator("api_key", mode="before")
     @classmethod
-    def resolve_api_key_env(cls, v: Optional[str]) -> Optional[str]:
+    def resolve_api_key_env(cls, v: str | None) -> str | None:
         """解析API密钥中的环境变量引用"""
         return resolve_env_var(v)
 
@@ -81,14 +81,14 @@ class EmbeddingModelConfig(BaseModel):
 
     model_name: str = Field(..., description="嵌入模型名称")
     model_type: str = Field(..., description="嵌入模型类型，如dashscope, openai, gemini, ollama")
-    api_key: Optional[str] = Field(None, description="API密钥")
-    base_url: Optional[str] = Field(None, description="API基础URL")
-    dimensions: Optional[int] = Field(None, description="向量维度")
-    generate_kwargs: Optional[Dict[str, Any]] = Field(default_factory=dict, description="生成参数")
+    api_key: str | None = Field(None, description="API密钥")
+    base_url: str | None = Field(None, description="API基础URL")
+    dimensions: int | None = Field(None, description="向量维度")
+    generate_kwargs: dict[str, Any] | None = Field(default_factory=dict, description="生成参数")
 
     @field_validator("api_key", mode="before")
     @classmethod
-    def resolve_api_key_env(cls, v: Optional[str]) -> Optional[str]:
+    def resolve_api_key_env(cls, v: str | None) -> str | None:
         """解析API密钥中的环境变量引用"""
         return resolve_env_var(v)
 
@@ -119,11 +119,11 @@ class AgentConfig(BaseModel):
 
     model: str = Field(..., description="引用models.yaml中的模型配置名")
     template: str = Field(..., description="提示词模板文件路径")
-    sys_prompt: Optional[str] = Field(None, description="系统提示词，如果为None则使用模板")
-    memory_config: Optional[Dict[str, Any]] = Field(default_factory=dict, description="记忆配置")
+    sys_prompt: str | None = Field(None, description="系统提示词，如果为None则使用模板")
+    memory_config: dict[str, Any] | None = Field(default_factory=dict, description="记忆配置")
     parallel_tool_calls: bool = Field(False, description="是否支持并行工具调用")
-    tools: List[str] = Field(default_factory=list, description="可用的普通工具列表")
-    long_term_memory: Optional[LongTermMemoryConfig] = Field(
+    tools: list[str] = Field(default_factory=list, description="可用的普通工具列表")
+    long_term_memory: LongTermMemoryConfig | None = Field(
         None,
         description="长期记忆配置",
     )
@@ -147,17 +147,17 @@ class ServerConfig(BaseModel):
 class Config(BaseModel):
     """完整配置"""
 
-    models: Dict[str, ModelConfig] = Field(..., description="模型配置字典，key为配置名")
-    agents: Dict[str, AgentConfig] = Field(..., description="Agent配置字典，key为agent名称")
+    models: dict[str, ModelConfig] = Field(..., description="模型配置字典，key为配置名")
+    agents: dict[str, AgentConfig] = Field(..., description="Agent配置字典，key为agent名称")
     primary_agent: str = Field(..., description="主agent名称")
     global_config: GlobalConfig = Field(default_factory=GlobalConfig, description="全局配置")
     server: ServerConfig = Field(default_factory=ServerConfig, description="服务器配置")
-    embedding_models: Dict[str, EmbeddingModelConfig] = Field(
+    embedding_models: dict[str, EmbeddingModelConfig] = Field(
         default_factory=dict, description="嵌入模型配置字典，key为配置名"
     )
 
     @model_validator(mode="after")
-    def validate_references(self) -> "Config":
+    def validate_references(self) -> Config:
         """验证配置引用的完整性
 
         Raises:
@@ -238,7 +238,7 @@ class Config(BaseModel):
             )
 
 
-def load_yaml(file_path: Union[str, Path]) -> Dict[str, Any]:
+def load_yaml(file_path: str | Path) -> dict[str, Any]:
     """加载YAML文件
 
     Args:
@@ -354,7 +354,7 @@ def load_config(config_dir: str = "config") -> Config:
         raise ConfigError("加载配置失败", str(e))
 
 
-def get_model_config(config: Config, config_name: str) -> Optional[ModelConfig]:
+def get_model_config(config: Config, config_name: str) -> ModelConfig | None:
     """根据配置名获取模型配置
 
     Args:
@@ -367,7 +367,7 @@ def get_model_config(config: Config, config_name: str) -> Optional[ModelConfig]:
     return config.models.get(config_name)
 
 
-def get_agent_config(config: Config, agent_name: str) -> Optional[AgentConfig]:
+def get_agent_config(config: Config, agent_name: str) -> AgentConfig | None:
     """根据名称获取Agent配置
 
     Args:
@@ -380,7 +380,7 @@ def get_agent_config(config: Config, agent_name: str) -> Optional[AgentConfig]:
     return config.agents.get(agent_name)
 
 
-def get_embedding_model_config(config: Config, config_name: str) -> Optional[EmbeddingModelConfig]:
+def get_embedding_model_config(config: Config, config_name: str) -> EmbeddingModelConfig | None:
     """根据配置名获取嵌入模型配置
 
     Args:

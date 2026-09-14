@@ -5,7 +5,7 @@
 
 import asyncio
 import traceback
-from typing import Generator
+from collections.abc import Generator
 
 import gradio as gr
 

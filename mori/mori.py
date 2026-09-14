@@ -6,7 +6,7 @@
 """
 
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from agentscope.exception import (
     AgentOrientedExceptionBase,
@@ -107,27 +107,27 @@ class Mori:
 
         except MemoryError as e:
             # 捕获长期记忆相关错误
-            self.logger.error(f"处理记忆相关请求时发生错误: {str(e)}", exc_info=True)
+            self.logger.error(f"处理记忆相关请求时发生错误: {e!s}", exc_info=True)
             return "抱歉,我在尝试记忆信息时遇到了问题。我已经记录了这个错误,会尽快修复。"
         except ToolInterruptedError as e:
             # AgentScope工具中断错误
-            self.logger.error(f"工具调用被中断: {str(e)}", exc_info=True)
+            self.logger.error(f"工具调用被中断: {e!s}", exc_info=True)
             return "抱歉,工具调用被中断，请稍后再试。"
         except ToolNotFoundError as e:
             # AgentScope工具未找到错误
-            self.logger.error(f"工具未找到: {str(e)}", exc_info=True)
+            self.logger.error(f"工具未找到: {e!s}", exc_info=True)
             return "抱歉,请求的工具不存在，请检查配置后重试。"
         except ToolInvalidArgumentsError as e:
             # AgentScope工具参数无效错误
-            self.logger.error(f"工具参数无效: {str(e)}", exc_info=True)
+            self.logger.error(f"工具参数无效: {e!s}", exc_info=True)
             return "抱歉,传递给工具的参数无效，请检查输入后重试。"
         except AgentOrientedExceptionBase as e:
             # AgentScope面向agent的异常
-            self.logger.error(f"AgentScope异常: {str(e)}", exc_info=True)
+            self.logger.error(f"AgentScope异常: {e!s}", exc_info=True)
             return "抱歉,处理您的请求时出现了问题，请稍后再试。"
         except TypeError as e:
             # 捕获Python原生TypeError，通常对应数据处理问题
-            self.logger.error(f"类型错误: {str(e)}", exc_info=True)
+            self.logger.error(f"类型错误: {e!s}", exc_info=True)
             error_msg = str(e)
             if "can only concatenate" in error_msg and "list" in error_msg:
                 return "抱歉,处理您的请求时出现了内部错误。请稍后再试。"
@@ -135,7 +135,7 @@ class Mori:
                 return "抱歉,处理您的请求时出现了类型错误。请检查输入后重试。"
         except ValueError as e:
             # 捕获Python原生ValueError，通常对应值验证问题
-            self.logger.error(f"值错误: {str(e)}", exc_info=True)
+            self.logger.error(f"值错误: {e!s}", exc_info=True)
             error_msg = str(e)
             if "text cannot be empty" in error_msg:
                 return "抱歉,生成回复时出现了格式错误。请重新提问。"
@@ -143,11 +143,11 @@ class Mori:
                 return "抱歉,输入值不符合要求，请检查后重试。"
         except (ConnectionError, TimeoutError) as e:
             # 网络相关错误
-            self.logger.error(f"网络错误: {str(e)}", exc_info=True)
+            self.logger.error(f"网络错误: {e!s}", exc_info=True)
             return "抱歉,网络连接出现问题，请稍后再试。"
         except Exception as e:
             # 其他未知错误
-            self.logger.error(f"处理消息时发生未知错误: {str(e)}", exc_info=True)
+            self.logger.error(f"处理消息时发生未知错误: {e!s}", exc_info=True)
             return "抱歉,处理您的请求时出现了错误。"
 
     async def reset(self) -> None:
@@ -155,16 +155,16 @@ class Mori:
         await self.primary_agent.memory.clear()
         self.logger.info("主agent对话历史已重置")
 
-    async def get_history(self) -> List[Dict[Any, Any]]:
+    async def get_history(self) -> list[dict[Any, Any]]:
         """获取主agent的对话历史
 
         Returns:
             对话历史列表
         """
-        history: List[Dict[Any, Any]] = await self.primary_agent.memory.get_memory()
+        history: list[dict[Any, Any]] = await self.primary_agent.memory.get_memory()
         return history
 
-    def list_agents(self) -> List[str]:
+    def list_agents(self) -> list[str]:
         """列出所有可用的agent名称
 
         Returns:
