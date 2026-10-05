@@ -13,10 +13,10 @@ import sys
 from contextvars import ContextVar, Token
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 # 上下文变量，用于存储请求级别的信息
-_log_context: ContextVar[Dict[str, Any]] = ContextVar("log_context", default={})
+_log_context: ContextVar[dict[str, Any]] = ContextVar("log_context", default={})
 
 
 class JSONFormatter(logging.Formatter):
@@ -85,7 +85,7 @@ class HumanReadableFormatter(logging.Formatter):
 def setup_logger(
     name: str = "mori",
     level: str = "INFO",
-    log_dir: Optional[str] = "logs",
+    log_dir: str | None = "logs",
     console: bool = True,
     json_format: bool = True,
     max_bytes: int = 10 * 1024 * 1024,  # 10MB
@@ -201,7 +201,7 @@ def clear_log_context() -> None:
     _log_context.set({})
 
 
-def get_log_context() -> Dict[str, Any]:
+def get_log_context() -> dict[str, Any]:
     """获取当前的日志上下文信息
 
     Returns:
@@ -225,7 +225,7 @@ class LogContext:
             **kwargs: 要设置的上下文键值对
         """
         self.context = kwargs
-        self.token: Optional[Token[Dict[str, Any]]] = None
+        self.token: Token[dict[str, Any]] | None = None
 
     def __enter__(self) -> "LogContext":
         """进入上下文"""
