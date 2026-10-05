@@ -5,7 +5,6 @@
 
 from logging import Logger
 from pathlib import Path
-from typing import Optional
 
 from agentscope.embedding import EmbeddingModelBase
 from agentscope.memory import Mem0LongTermMemory
@@ -28,7 +27,7 @@ def create_long_term_memory(
     on_disk: bool = True,
     vector_store_provider: str = DEFAULT_VECTOR_STORE_PROVIDER,
     collection_name: str = DEFAULT_COLLECTION_NAME,
-    logger: Optional[Logger] = None,
+    logger: Logger | None = None,
 ) -> Mem0LongTermMemory:
     """根据配置创建长期记忆实例
 

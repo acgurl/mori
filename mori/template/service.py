@@ -4,15 +4,15 @@
 """
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 from mori.template.loader import TemplateLoader
 
 
 def load_system_prompt(
     template_name: str,
-    sys_prompt: Optional[str] = None,
-    template_loader: Optional[TemplateLoader] = None,
+    sys_prompt: str | None = None,
+    template_loader: TemplateLoader | None = None,
 ) -> str:
     """加载系统提示词
 
@@ -30,7 +30,7 @@ def load_system_prompt(
         return sys_prompt
 
     # 准备模板上下文（运行时信息）
-    context: Dict[str, Any] = {
+    context: dict[str, Any] = {
         "current_time": datetime.now().strftime("%H:%M:%S"),
         "current_date": datetime.now().strftime("%Y年%m月%d日 %A"),
     }
