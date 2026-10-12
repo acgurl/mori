@@ -2,4 +2,4 @@
 
 from mori.agent.factory import build_agent, create_mori_agent
 
-__all__ = ["create_mori_agent", "build_agent"]
+__all__ = ["build_agent", "create_mori_agent"]
