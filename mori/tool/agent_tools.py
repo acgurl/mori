@@ -3,7 +3,7 @@
 将Agent包装为工具，使主agent可以调用子agent。
 """
 
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from agentscope.agent import ReActAgent
 from agentscope.message import Msg
@@ -51,7 +51,7 @@ class AgentTool:
 
 
 def create_agent_tool_function(
-    agent: ReActAgent, agent_name: str, description: Optional[str] = None
+    agent: ReActAgent, agent_name: str, description: str | None = None
 ) -> Callable[[str], ToolResponse]:
     """创建agent工具函数
 

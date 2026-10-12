@@ -3,7 +3,6 @@
 提供用于包装 AgentScope 模型的工具类。
 """
 
-from typing import Union
 
 from agentscope.model import ChatModelBase
 
@@ -21,7 +20,7 @@ class NonStreamingModelWrapper(ChatModelBase):
         response = await wrapped_model(messages)
     """
 
-    def __init__(self, model: Union[ChatModelBase, str]):
+    def __init__(self, model: ChatModelBase | str):
         """初始化包装器
 
         Args:
