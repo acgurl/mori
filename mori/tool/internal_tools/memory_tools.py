@@ -32,7 +32,7 @@ async def record_to_memory(content: str, topic: str = "general") -> ToolResponse
         )
     except Exception as e:
         # 抛出MemoryError异常，以便在mori.py中进行类型匹配
-        raise MemoryError(f"记录到记忆时出错: {str(e)}")
+        raise MemoryError(f"记录到记忆时出错: {e!s}")
 
 
 async def retrieve_from_memory(query: str, topic: str = "general") -> ToolResponse:
@@ -58,7 +58,7 @@ async def retrieve_from_memory(query: str, topic: str = "general") -> ToolRespon
         )
     except Exception as e:
         # 抛出MemoryError异常，以便在mori.py中进行类型匹配
-        raise MemoryError(f"从记忆检索时出错: {str(e)}")
+        raise MemoryError(f"从记忆检索时出错: {e!s}")
 
 
 def register_memory_tools(toolkit: Toolkit) -> None:
